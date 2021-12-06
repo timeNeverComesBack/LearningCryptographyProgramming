@@ -1,9 +1,56 @@
 # chr()
 # ord()
+# 待加密字符串
 rawString = "AWP"
+# 密钥
+key = 13
+# 字符字典(多种字典)
+SYMBOLS_1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 !?,."
+SYMBOLS_2 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !?,."
+SYMBOLS_3 = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !?,."
+SYMBOLS_4 = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !?,."
+SYMBOLS_5 = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890 !?,."
+SYMBOLS_6 = "aAbBcCdDeEfFgGhHiIjJkklLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890 !?,."
+# 字符字典列表
+SYMBOLS = [SYMBOLS_1, SYMBOLS_2, SYMBOLS_3, SYMBOLS_4, SYMBOLS_5, SYMBOLS_6]
 
-def CaesarEncrypt(rawString, key = 9):
+rawString = input("请输入字符串：")
+print("请选择字典（用于加密）：")
+for ss in SYMBOLS:
+    print(ss)
+
+def caesarCipher(rawString, key = 13, symbolNumber = 0, cryptType = 0):
+    if cryptType == 0:
+        # 调用加密函数
+        print("正在加密……")
+        return CaesarEncrypt(rawString, key, symbolNumber)
+    else:
+        # 调用解密函数
+        print("正在解密……")
+        return CaesarDecrypt(rawString, key, symbolNumber)
+
+def CaesarEncrypt(rawString, key, symbolNumber):
+    symbols = SYMBOLS[symbolNumber]
+    caesarString = ''
+    for character in rawString:
+        if character in symbols:
+            charIndex = symbols.find(character)
+            charIndex += key
+            # 回环操作
+            if charIndex >= len(symbols):
+                print(charIndex)
+                charIndex -= len(symbols)
+            elif charIndex < 0:
+                print(charIndex)
+                charIndex += len(symbols)
+
+            caesarString += symbols[charIndex]
+        else:
+            caesarString += character
+
+    return caesarString
+
+def CaesarDecrypt(rawString, key, symbolNumber):
     return rawString
 
-def CaesarDecrypt(rawString, key = 9):
-    return rawString
+print(caesarCipher(rawString, key, 0, 0))
