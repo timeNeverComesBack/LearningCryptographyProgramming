@@ -15,9 +15,14 @@ SYMBOLS_6 = "aAbBcCdDeEfFgGhHiIjJkklLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890 !?,.
 SYMBOLS = [SYMBOLS_1, SYMBOLS_2, SYMBOLS_3, SYMBOLS_4, SYMBOLS_5, SYMBOLS_6]
 
 rawString = input("请输入字符串：")
-print("请选择字典（用于加密）：")
+print("请选择字典（用于加解密）：")
 for ss in SYMBOLS:
-    print(ss)
+    print("加密字典" + str(SYMBOLS.index(ss) + 1) + "： " + ss)
+symbolNumber = int(input("选择序号：")) - 1
+
+key = int(input("设置密钥（0~25内的整数）："))
+print("请选择：加密 0，解密 1 ：")
+cryptType = int(input("0 or 1:"))
 
 def caesarCipher(rawString, key = 13, symbolNumber = 0, cryptType = 0):
     if cryptType == 0:
@@ -36,13 +41,15 @@ def CaesarEncrypt(rawString, key, symbolNumber):
         if character in symbols:
             charIndex = symbols.find(character)
             charIndex += key
-            # 回环操作
-            if charIndex >= len(symbols):
-                print(charIndex)
-                charIndex -= len(symbols)
-            elif charIndex < 0:
-                print(charIndex)
-                charIndex += len(symbols)
+            # 回环操作 P1
+            charIndex = charIndex % len(symbols)
+            # 回环操作 P2
+            # if charIndex >= len(symbols):
+            #     print(charIndex)
+            #     charIndex -= len(symbols)
+            # elif charIndex < 0:
+            #     print(charIndex)
+            #     charIndex += len(symbols)
 
             caesarString += symbols[charIndex]
         else:
@@ -51,6 +58,16 @@ def CaesarEncrypt(rawString, key, symbolNumber):
     return caesarString
 
 def CaesarDecrypt(rawString, key, symbolNumber):
-    return rawString
+    symbols = SYMBOLS[symbolNumber]
+    caesarString = ''
+    for character in rawString:
+        if character in symbols:
+            charIndex = symbols.find(character)
+            charIndex -= key
+            charIndex = charIndex % len(symbols)
+            caesarString += symbols[charIndex]
+        else:
+            caesarString += character
+    return caesarString
 
-print(caesarCipher(rawString, key, 0, 0))
+print(caesarCipher(rawString, key, symbolNumber, cryptType))
